@@ -2,6 +2,7 @@ package server
 
 import "github.com/gin-gonic/gin"
 import "github.com/andrewarrow/feedbacks/util"
+import "github.com/andrewarrow/feedbacks/email"
 import "time"
 import "fmt"
 import "net/http/httputil"
@@ -44,11 +45,11 @@ func Serve() {
 		}
 
 		go http.ListenAndServe(":http", certManager.HTTPHandler(nil))
-		//go email.Run(":2525")
 		server.ListenAndServeTLS("", "")
+		go email.Run(":2525")
 	} else {
 		go router.Run(":8080")
-		//go email.Run(":2525")
+		go email.Run(":2525")
 	}
 
 	for {
