@@ -2,11 +2,8 @@ package util
 
 import "github.com/spf13/viper"
 import "fmt"
-import "strings"
 
 var AllConfig Config
-var HostToPort = map[string]string{}
-var Hosts = []string{}
 
 type DatabaseConfig struct {
 	Host     string
@@ -18,10 +15,10 @@ type DatabaseConfig struct {
 
 type PathConfig struct {
 	Prefix string
+	Sites  string
 }
 type HttpConfig struct {
-	Ports string
-	Hosts string
+	Hosts []string
 }
 
 type Config struct {
@@ -45,13 +42,6 @@ func InitConfig() bool {
 	}
 	if err := v.Unmarshal(&AllConfig); err != nil {
 		fmt.Printf("couldn't read config: %s", err)
-	}
-
-	ports := strings.Split(AllConfig.Http.Ports, ",")
-	Hosts = strings.Split(AllConfig.Http.Hosts, ",")
-
-	for i, port := range ports {
-		HostToPort[Hosts[i]] = port
 	}
 
 	return true

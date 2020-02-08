@@ -3,6 +3,7 @@ package server
 import "github.com/gin-gonic/gin"
 import "github.com/andrewarrow/feedbacks/util"
 import "time"
+import "fmt"
 import "net/http/httputil"
 import "os"
 import "net/http"
@@ -14,11 +15,12 @@ var local = ""
 var runners = map[string]*httputil.ReverseProxy{}
 
 func Serve() {
-	for host, port := range util.HostToPort {
-		url, _ := u.Parse("http://localhost:" + port)
+	port := 3001
+	for i, host := range util.AllConfig.Http.Hosts {
+		url, _ := u.Parse(fmt.Sprintf("http://localhost:%d", (port + i)))
 		runners[host] = httputil.NewSingleHostReverseProxy(url)
 	}
-	local = os.Getenv("MANY_LOCAL")
+	local = os.Getenv("LOCAL")
 	router := gin.Default()
 	router.GET("/*name", handleReq)
 	router.POST("/*name", handleReq)
@@ -26,7 +28,7 @@ func Serve() {
 	if local == "" {
 		certManager := autocert.Manager{
 			Prompt:     autocert.AcceptTOS,
-			HostPolicy: autocert.HostWhitelist(util.Hosts...),
+			HostPolicy: autocert.HostWhitelist(util.AllConfig.Http.Hosts...),
 			Cache:      autocert.DirCache("/certs"),
 		}
 
