@@ -22,7 +22,7 @@ func Serve() {
 		url, _ := u.Parse(fmt.Sprintf("http://localhost:%d", (port + i)))
 		runners[host] = httputil.NewSingleHostReverseProxy(url)
 		path := fmt.Sprintf("%s%s", util.AllConfig.Path.Sites, host)
-		go exec.Command("run_feedback", path, fmt.Sprintf("%d", (port+i))).Output()
+		go exec.Command("run_feedback", path, fmt.Sprintf("%d", (port+i)), host).Output()
 	}
 	local = os.Getenv("LOCAL")
 	router := gin.Default()
