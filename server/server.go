@@ -6,6 +6,7 @@ import "time"
 import "fmt"
 import "net/http/httputil"
 import "os"
+import "os/exec"
 import "net/http"
 import "crypto/tls"
 import "golang.org/x/crypto/acme/autocert"
@@ -19,6 +20,8 @@ func Serve() {
 	for i, host := range util.AllConfig.Http.Hosts {
 		url, _ := u.Parse(fmt.Sprintf("http://localhost:%d", (port + i)))
 		runners[host] = httputil.NewSingleHostReverseProxy(url)
+		path := fmt.Sprintf("%s%s", util.AllConfig.Path.Sites, host)
+		go exec.Command("run_feedback", path, fmt.Sprintf("%d", (port+i))).Output()
 	}
 	local = os.Getenv("LOCAL")
 	router := gin.Default()
