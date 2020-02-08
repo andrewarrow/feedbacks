@@ -94,4 +94,15 @@ quit
 mysql -uroot [name] < migrations/first.sql
 ```
 
+Then you are off to the races making routes and controller and templates just
+like you did in rails.
 
+If you run feedbacks like:
+
+```
+LOCAL=jjaa.me ./feedbacks
+```
+
+It will run just on port 8080 to avoid mail and https during local dev.
+
+You can also just run 1 feedback on 1 port for local dev.
