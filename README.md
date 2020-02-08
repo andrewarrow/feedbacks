@@ -28,7 +28,6 @@ in conf.toml with the spam score.
 EXAMPLE
 ==================
 
-
 ```
 brew install mysql
 brew services start mysql
@@ -37,12 +36,22 @@ mysql -uroot
   CREATE USER 'dev'@'localhost' IDENTIFIED BY 'password'; 
   GRANT ALL ON *.* TO 'dev'@'localhost' WITH GRANT OPTION;
 
-create database feedback;
-```
-```
+create database feedbacks;
 cp conf.toml.dist conf.toml
-go build
-./feedback
-
-http://localhost:3000/
 ```
+
+Edit your local copy of conf.toml:
+
+```
+[http]
+hosts = [
+  "cyborg.st",
+  "many.pw",
+  "jjaa.me"
+]
+```
+
+In this example I'm using the 3 domains I own and telling feedbacks to
+handle all the emails for all three, all the TLS certs, all the
+hosting on 443 and 80. Each request that comes in will be handled by
+the right feedback.
