@@ -1,4 +1,4 @@
-FEEDBACKS
+ABOUT FEEDBACKS
 ==================
 
 Feedbacks is a system for running N [feedback](https://github.com/andrewarrow/feedback)s
@@ -25,5 +25,24 @@ in conf.toml. It sends each email thru [https://spamassassin.apache.org/](https:
 in conf.toml with the spam score.
 
 
+EXAMPLE
+==================
 
 
+```
+brew install mysql
+brew services start mysql
+mysql -uroot
+
+  CREATE USER 'dev'@'localhost' IDENTIFIED BY 'password'; 
+  GRANT ALL ON *.* TO 'dev'@'localhost' WITH GRANT OPTION;
+
+create database feedback;
+```
+```
+cp conf.toml.dist conf.toml
+go build
+./feedback
+
+http://localhost:3000/
+```
