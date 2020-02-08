@@ -1,0 +1,13 @@
+[database]
+user="dev"
+host="localhost"
+port=3306
+password="password"
+database="feedbacks"
+
+[paths]
+prefix="./"
+
+[http]
+ports="3001,3002"
+hosts="domain.foo,other.thing"
