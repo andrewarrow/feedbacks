@@ -103,6 +103,6 @@ If you run feedbacks like:
 LOCAL=jjaa.me ./feedbacks
 ```
 
-It will run just on port 8080 to avoid mail and https during local dev.
+It will run just on port 8080 to avoid https during local dev.
 
 You can also just run 1 feedback on 1 port for local dev.
