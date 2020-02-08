@@ -29,6 +29,8 @@ EXAMPLE
 ==================
 
 ```
+cp conf.toml.dist conf.toml
+go build
 brew install mysql
 brew services start mysql
 mysql -uroot
@@ -37,7 +39,9 @@ mysql -uroot
   GRANT ALL ON *.* TO 'dev'@'localhost' WITH GRANT OPTION;
 
 create database feedbacks;
-cp conf.toml.dist conf.toml
+quit
+
+mysql -uroot feedbacks < migrations/first.sql
 ```
 
 Edit your local copy of conf.toml:
@@ -55,3 +59,39 @@ In this example I'm using the 3 domains I own and telling feedbacks to
 handle all the emails for all three, all the TLS certs, all the
 hosting on 443 and 80. Each request that comes in will be handled by
 the right feedback.
+
+```
+[paths]
+sites = "./"
+```
+
+Change this path to where you have the code for these 3 feedbacks.
+
+This means checkout a fresh copy of [https://github.com/andrewarrow/feedback](https://github.com/andrewarrow/feedback) and name it your domain. In my case I have:
+
+```
+./cyborg.st/
+./many.pw/
+./jjaa.me/
+```
+
+each one with a full copy of the code in https://github.com/andrewarrow/feedback.
+
+Each one needs 
+
+```
+cp conf.toml.dist conf.toml
+go build
+```
+
+and 
+
+```
+mysql -uroot
+create database [name];
+quit
+
+mysql -uroot [name] < migrations/first.sql
+```
+
+
