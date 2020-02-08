@@ -1,4 +1,5 @@
-== FEEDBACKS ==
+FEEDBACKS
+==================
 
-Feedbacks is a system for running N [feedback]s(https://github.com/andrewarrow/feedback)
+Feedbacks is a system for running N [feedback](https://github.com/andrewarrow/feedback)s
 
