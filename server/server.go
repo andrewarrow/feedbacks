@@ -68,7 +68,7 @@ func getHost(c *gin.Context) string {
 func handleReq(c *gin.Context) {
 	defer c.Request.Body.Close()
 	c.Writer.Header().Add("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
-	c.Writer.Header().Add("Access-Control-Allow-Methods", "GET")
+	c.Writer.Header().Add("Access-Control-Allow-Methods", "GET,POST")
 	c.Writer.Header().Add("Access-Control-Allow-Headers", "Filename")
 	host := getHost(c)
 	runners[host].ServeHTTP(c.Writer, c.Request)
