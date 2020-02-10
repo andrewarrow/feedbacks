@@ -45,8 +45,8 @@ func Serve() {
 		}
 
 		go http.ListenAndServe(":http", certManager.HTTPHandler(nil))
-		server.ListenAndServeTLS("", "")
 		go email.Run(":25")
+		server.ListenAndServeTLS("", "")
 	} else {
 		go router.Run(":8080")
 		go email.Run(":25")
