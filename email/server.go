@@ -1,13 +1,13 @@
 package email
 
 import (
+	"fmt"
+	"github.com/emersion/go-smtp"
+	"github.com/saintienn/go-spamc"
 	"io"
 	"io/ioutil"
 	"strings"
 	"time"
-
-	"github.com/emersion/go-smtp"
-	"github.com/saintienn/go-spamc"
 )
 import "github.com/jmoiron/sqlx"
 import "github.com/andrewarrow/feedbacks/persist"
@@ -27,7 +27,7 @@ type Session struct {
 }
 
 func (s *Session) Mail(from string, opts smtp.MailOptions) error {
-	//fmt.Println("Mail from:", from)
+	fmt.Println("Mail from:", from)
 	s.SentFrom = from
 	return nil
 }
@@ -49,6 +49,7 @@ func (s *Session) Data(r io.Reader) error {
 	}
 
 	tokens := strings.Split(string(b), "\n")
+	fmt.Println("MMMMM", tokens)
 	subjectDone := false
 	for _, token := range tokens {
 		if subjectDone {
@@ -83,6 +84,7 @@ func (s *Session) Data(r io.Reader) error {
 		"spam_score": spamScore,
 		"sent_from":  s.SentFrom, "sent_to": s.SentTo,
 		"subject": s.Subject}
+	fmt.Println("33333", m)
 	insertChannel <- m
 	return nil
 }
