@@ -2,15 +2,16 @@ package email
 
 import (
 	"fmt"
-	"github.com/emersion/go-smtp"
-	"github.com/saintienn/go-spamc"
 	"io"
 	"io/ioutil"
 	"strings"
 	"time"
+
+	"github.com/andrewarrow/feedbacks/persist"
+	"github.com/emersion/go-smtp"
+	"github.com/jmoiron/sqlx"
+	"github.com/saintienn/go-spamc"
 )
-import "github.com/jmoiron/sqlx"
-import "github.com/andrewarrow/feedbacks/persist"
 
 var db *sqlx.DB
 var spam *spamc.Client
@@ -27,7 +28,7 @@ type Session struct {
 }
 
 func (s *Session) Mail(from string, opts smtp.MailOptions) error {
-	fmt.Println("Mail from:", from)
+	fmt.Println("Mail from:", from, opts)
 	s.SentFrom = from
 	return nil
 }
@@ -47,24 +48,19 @@ func (s *Session) Data(r io.Reader) error {
 	if err != nil {
 		return err
 	}
+	s.Body = string(b)
 
-	tokens := strings.Split(string(b), "\n")
-	fmt.Println("MMMMM", tokens)
-	subjectDone := false
+	tokens := strings.Split(s.Body, "\n")
 	for _, token := range tokens {
-		if subjectDone {
-			s.Body += token + "\n"
-		}
 		if strings.HasPrefix(token, "Subject:") {
 			s.Subject = token[9:]
-			subjectDone = true
+			break
 		}
-
 	}
 
 	isSpam := 0
 	spamScore := 0.0
-	reply, err := spam.Check(string(b))
+	reply, err := spam.Check(s.Body)
 
 	if err == nil {
 		i1, ok := reply.Vars["isSpam"]
