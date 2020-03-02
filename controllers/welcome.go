@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/andrewarrow/feedbacks/models"
-	"github.com/andrewarrow/feedbacks/persist"
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 )
 
 var flash = ""
 var user *models.User
-var Db = persist.Connection()
+var Db *sqlx.DB
 
 func ValidAdminUser(c *gin.Context) bool {
 	json, _ := c.Cookie("user")

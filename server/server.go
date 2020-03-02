@@ -12,6 +12,7 @@ import (
 	"github.com/andrewarrow/feedbacks/controllers"
 	"github.com/andrewarrow/feedbacks/email"
 	"github.com/andrewarrow/feedbacks/models"
+	"github.com/andrewarrow/feedbacks/persist"
 	"github.com/andrewarrow/feedbacks/util"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/acme/autocert"
@@ -24,6 +25,7 @@ var runners = map[string]*httputil.ReverseProxy{}
 
 func Serve() {
 	port := 3001
+	controllers.Db = persist.Connection()
 	domains, err := models.SelectDomains(controllers.Db, 0)
 	hosts := []string{}
 	if err != "" {
@@ -39,9 +41,8 @@ func Serve() {
 	}
 	local = os.Getenv("LOCAL")
 	router := gin.Default()
-	router.GET("/*name", handleReq)
-	router.POST("/*name", handleReq)
-	router.GET("/feebacks", controllers.WelcomeIndex)
+	router.GET("/feedbacks", controllers.WelcomeIndex)
+	router.NoRoute(handleReq)
 
 	if local == "" {
 		certManager := autocert.Manager{
