@@ -42,6 +42,8 @@ func Serve() {
 	local = os.Getenv("LOCAL")
 	router := gin.Default()
 	router.GET("/feedbacks", controllers.WelcomeIndex)
+	prefix := util.AllConfig.Path.Prefix
+	AddTemplates(router, prefix)
 	router.NoRoute(handleReq)
 
 	if local == "" {

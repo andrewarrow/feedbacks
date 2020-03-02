@@ -1,0 +1,18 @@
+
+{{define "_whoami"}}
+<div class="box header">
+  {{if .user}}
+  hi {{.user.Email}} 
+          <a href="#" onclick="event.preventDefault(); logOut();">Log Out</a></li>
+<form id="out" method="POST" action="/sessions/destroy">
+</form>
+<script>
+function logOut() {
+  document.getElementById("out").submit();
+}
+</script>
+  {{else}}
+  hello! <a href="/sessions/new">Log In or Create Account</a>
+  {{end}}
+</div>
+{{end}}
