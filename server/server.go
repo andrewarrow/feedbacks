@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"github.com/andrewarrow/feedbacks/email"
+	"github.com/andrewarrow/feedbacks/models"
+	"github.com/andrewarrow/feedbacks/persist"
 	"github.com/andrewarrow/feedbacks/util"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/acme/autocert"
@@ -20,14 +22,22 @@ import (
 
 var local = ""
 var runners = map[string]*httputil.ReverseProxy{}
+var Db = persist.Connection()
 
 func Serve() {
 	port := 3001
-	for i, host := range util.AllConfig.Http.Hosts {
+	domains, err := models.SelectDomains(Db, 0)
+	hosts := []string{}
+	if err != "" {
+		fmt.Println(err)
+		return
+	}
+	for i, host := range domains {
+		hosts = append(hosts, host.Domain)
 		url, _ := u.Parse(fmt.Sprintf("http://localhost:%d", (port + i)))
-		runners[host] = httputil.NewSingleHostReverseProxy(url)
-		path := fmt.Sprintf("%s%s", util.AllConfig.Path.Sites, host)
-		go exec.Command("run_feedback", path, fmt.Sprintf("%d", (port+i)), host).Output()
+		runners[host.Domain] = httputil.NewSingleHostReverseProxy(url)
+		path := fmt.Sprintf("%s%s", util.AllConfig.Path.Sites, host.Domain)
+		go exec.Command("run_feedback", path, fmt.Sprintf("%d", (port+i)), host.Domain).Output()
 	}
 	local = os.Getenv("LOCAL")
 	router := gin.Default()
@@ -37,7 +47,7 @@ func Serve() {
 	if local == "" {
 		certManager := autocert.Manager{
 			Prompt:     autocert.AcceptTOS,
-			HostPolicy: autocert.HostWhitelist(util.AllConfig.Http.Hosts...),
+			HostPolicy: autocert.HostWhitelist(hosts...),
 			Cache:      autocert.DirCache("/certs"),
 		}
 
