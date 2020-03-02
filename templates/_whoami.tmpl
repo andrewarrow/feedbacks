@@ -4,7 +4,7 @@
   {{if .user}}
   hi {{.user.Email}} 
           <a href="#" onclick="event.preventDefault(); logOut();">Log Out</a></li>
-<form id="out" method="POST" action="/sessions/destroy">
+<form id="out" method="POST" action="/feedbacks/sessions/destroy">
 </form>
 <script>
 function logOut() {
@@ -12,7 +12,7 @@ function logOut() {
 }
 </script>
   {{else}}
-  hello! <a href="/sessions/new">Log In or Create Account</a>
+  hello! <a href="/feedbacks/sessions/new">Log In or Create Account</a>
   {{end}}
 </div>
 {{end}}

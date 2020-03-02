@@ -44,6 +44,10 @@ func Serve() {
 	prefix := util.AllConfig.Path.Prefix
 	router.Static("/feedbacks/assets", prefix+"assets")
 	router.GET("/feedbacks", controllers.WelcomeIndex)
+	sessions := router.Group("/feedbacks/sessions")
+	sessions.GET("/new", controllers.SessionsNew)
+	sessions.POST("/", controllers.SessionsCreate)
+	sessions.POST("/destroy", controllers.SessionsDestroy)
 	AddTemplates(router, prefix)
 	router.NoRoute(handleReq)
 

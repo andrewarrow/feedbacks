@@ -26,7 +26,6 @@ func SessionsCreate(c *gin.Context) {
 	email := c.PostForm("email")
 	password := c.PostForm("password")
 	flash := ""
-	host := "TODO"
 
 	if !strings.Contains(email, "@") || !strings.Contains(email, ".") || len(email) < 7 {
 		flash = "not valid email"
@@ -61,7 +60,6 @@ values (:email, SHA1(:phrase), :flavor)`, m)
 	c.Abort()
 }
 func SessionsDestroy(c *gin.Context) {
-	host := "TODO"
 	c.SetCookie("user", "", 3600, "/", host, false, false)
 
 	c.Redirect(http.StatusFound, "/")
