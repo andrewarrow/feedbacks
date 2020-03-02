@@ -7,12 +7,11 @@ import (
 	"net/http/httputil"
 	"os"
 	"os/exec"
-	"strings"
 	"time"
 
+	"github.com/andrewarrow/feedbacks/controllers"
 	"github.com/andrewarrow/feedbacks/email"
 	"github.com/andrewarrow/feedbacks/models"
-	"github.com/andrewarrow/feedbacks/persist"
 	"github.com/andrewarrow/feedbacks/util"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/acme/autocert"
@@ -22,11 +21,10 @@ import (
 
 var local = ""
 var runners = map[string]*httputil.ReverseProxy{}
-var Db = persist.Connection()
 
 func Serve() {
 	port := 3001
-	domains, err := models.SelectDomains(Db, 0)
+	domains, err := models.SelectDomains(controllers.Db, 0)
 	hosts := []string{}
 	if err != "" {
 		fmt.Println(err)
@@ -43,6 +41,7 @@ func Serve() {
 	router := gin.Default()
 	router.GET("/*name", handleReq)
 	router.POST("/*name", handleReq)
+	router.GET("/feebacks", controllers.WelcomeIndex)
 
 	if local == "" {
 		certManager := autocert.Manager{
@@ -82,11 +81,6 @@ func getHost(c *gin.Context) string {
 }
 func handleReq(c *gin.Context) {
 	defer c.Request.Body.Close()
-	tokens := strings.Split(c.Param("name"), "/")
-	if len(tokens) > 1 && tokens[1] == "feedbacks" {
-
-		return
-	}
 	c.Writer.Header().Add("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
 	c.Writer.Header().Add("Access-Control-Allow-Methods", "GET,POST")
 	c.Writer.Header().Add("Access-Control-Allow-Headers", "Filename")

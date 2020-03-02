@@ -10,3 +10,20 @@ CREATE TABLE inbox (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     KEY host (host)
 ) ENGINE InnoDB;
+
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    email varchar(255),
+    phrase varchar(255),
+    flavor varchar(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_email (email)
+) ENGINE InnoDB;
+
+CREATE TABLE domains (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    domain varchar(255),
+    user_id int,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY udomain (domain)
+) ENGINE InnoDB;
