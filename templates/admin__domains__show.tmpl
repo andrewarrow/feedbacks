@@ -1,0 +1,31 @@
+{{template "_header" .}}
+{{template "_whoami" .}}
+
+		<div class="box content">
+
+<a href="/feedbacks/domains/">back</a>
+<br/>
+<br/>
+{{ .domain }}
+<br/>
+<br/>
+<table width="100%">
+{{range $i, $item := .items}}
+<tr>
+  <td>{{add $i 1}}</td>
+  <td>{{$item.SentTo}}</td>
+  <td>{{$item.SentFrom}}</td>
+  <td>{{$item.Subject}}</td>
+  <td>{{$item.CreatedAt}}</td>
+</tr>
+<tr>
+<td colspan="5">{{$item.MessageText}}</td>
+</tr>
+<tr>
+<td colspan="5">{{$item.MessageHTML}}</td>
+</tr>
+
+{{end}}
+</table>
+
+{{template "_footer" .}}

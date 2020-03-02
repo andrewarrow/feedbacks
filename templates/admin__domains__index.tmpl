@@ -1,0 +1,20 @@
+{{template "_header" .}}
+{{template "_whoami" .}}
+
+		<div class="box content">
+
+<form id="f1" method="POST" action="/feedbacks/domains">
+<input type="text" name="domain" class="inputBig"/>
+<div class="btn" onclick="document.getElementById('f1').submit();">Add Domain</div>
+</form>
+
+<table width="100%">
+{{range $i, $item := .domains}}
+<tr>
+  <td>{{add $i 1}}</td>
+  <td><a href="/feedbacks/domains/{{$item.Domain}}">{{$item.Domain}}</a></td>
+  <td>{{$item.CreatedAt}}</td>
+</tr>
+{{end}}
+</table>
+{{template "_footer" .}}

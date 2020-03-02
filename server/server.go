@@ -48,6 +48,10 @@ func Serve() {
 	sessions.GET("/new", controllers.SessionsNew)
 	sessions.POST("/", controllers.SessionsCreate)
 	sessions.POST("/destroy", controllers.SessionsDestroy)
+	fbDomains := router.Group("/feedbacks/domains")
+	fbDomains.GET("/", controllers.AdminDomainsIndex)
+	fbDomains.GET("/:domain", controllers.AdminDomainsShow)
+	fbDomains.POST("/", controllers.AdminDomainsCreate)
 	AddTemplates(router, prefix)
 	router.NoRoute(handleReq)
 
