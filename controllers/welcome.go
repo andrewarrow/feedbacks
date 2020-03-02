@@ -17,7 +17,7 @@ func ValidAdminUser(c *gin.Context) bool {
 	user = models.DecodeUser(json)
 	if user == nil || user.Flavor != "admin" {
 		SetFlash("you need to login", c)
-		c.Redirect(http.StatusFound, "/sessions/new")
+		c.Redirect(http.StatusFound, "/feedbacks/sessions/new")
 		c.Abort()
 		return false
 	}
@@ -44,7 +44,7 @@ func BeforeAll(flavor string, c *gin.Context) bool {
 	if flavor == "user" {
 		if user == nil {
 			SetFlash("you need to login", c)
-			c.Redirect(http.StatusFound, "/sessions/new")
+			c.Redirect(http.StatusFound, "/feedbacks/sessions/new")
 			c.Abort()
 			return false
 		}
@@ -52,7 +52,7 @@ func BeforeAll(flavor string, c *gin.Context) bool {
 	}
 	if user == nil || user.Flavor != "admin" {
 		SetFlash("you need to login", c)
-		c.Redirect(http.StatusFound, "/sessions/new")
+		c.Redirect(http.StatusFound, "/feedbacks/sessions/new")
 		c.Abort()
 		return false
 	}
