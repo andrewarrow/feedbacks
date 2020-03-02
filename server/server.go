@@ -1,17 +1,22 @@
 package server
 
-import "github.com/gin-gonic/gin"
-import "github.com/andrewarrow/feedbacks/util"
-import "github.com/andrewarrow/feedbacks/email"
-import "time"
-import "fmt"
-import "net/http/httputil"
-import "os"
-import "os/exec"
-import "net/http"
-import "crypto/tls"
-import "golang.org/x/crypto/acme/autocert"
-import u "net/url"
+import (
+	"crypto/tls"
+	"fmt"
+	"net/http"
+	"net/http/httputil"
+	"os"
+	"os/exec"
+	"strings"
+	"time"
+
+	"github.com/andrewarrow/feedbacks/email"
+	"github.com/andrewarrow/feedbacks/util"
+	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/acme/autocert"
+
+	u "net/url"
+)
 
 var local = ""
 var runners = map[string]*httputil.ReverseProxy{}
@@ -67,6 +72,11 @@ func getHost(c *gin.Context) string {
 }
 func handleReq(c *gin.Context) {
 	defer c.Request.Body.Close()
+	tokens := strings.Split(c.Param("name"), "/")
+	if len(tokens) > 1 && tokens[1] == "feedbacks" {
+
+		return
+	}
 	c.Writer.Header().Add("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
 	c.Writer.Header().Add("Access-Control-Allow-Methods", "GET,POST")
 	c.Writer.Header().Add("Access-Control-Allow-Headers", "Filename")
