@@ -11,7 +11,6 @@ import (
 var flash = ""
 var user *models.User
 var Db *sqlx.DB
-var host = ""
 
 func ValidAdminUser(c *gin.Context) bool {
 	json, _ := c.Cookie("user")
@@ -24,11 +23,14 @@ func ValidAdminUser(c *gin.Context) bool {
 	}
 	return true
 }
-func BeforeAll(flavor string, c *gin.Context) bool {
-	host = c.Request.Host
+func rightHost(c *gin.Context) string {
+	host := c.Request.Host
 	if host == "localhost:8080" {
 		host = "localhost"
 	}
+	return host
+}
+func BeforeAll(flavor string, c *gin.Context) bool {
 	flash, _ = c.Cookie("flash")
 	SetFlash("", c)
 
@@ -58,7 +60,7 @@ func BeforeAll(flavor string, c *gin.Context) bool {
 }
 
 func SetFlash(s string, c *gin.Context) {
-	c.SetCookie("flash", s, 3600, "/", host, false, false)
+	c.SetCookie("flash", s, 3600, "/", rightHost(c), false, false)
 }
 
 func WelcomeIndex(c *gin.Context) {
