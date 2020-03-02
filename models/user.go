@@ -9,7 +9,8 @@ type User struct {
 	Id        int    `json:"id"`
 	Email     string `json:"email"`
 	Flavor    string `json:"flavor"`
-	CreatedAt int64  `json:"created_at"`
+	Phrase    string
+	CreatedAt int64 `json:"created_at"`
 }
 
 func (u *User) Encode() string {
@@ -39,4 +40,13 @@ func SelectUsers(db *sqlx.DB) ([]User, string) {
 	}
 
 	return users, s
+}
+func InsertUser(db *sqlx.DB, u *User) string {
+	_, err := db.NamedExec("INSERT INTO users (email, flavor, phrase) values (:email, :flavor, SHA1(:phrase))",
+		map[string]interface{}{"email": u.Email, "flavor": u.Flavor,
+			"phrase": u.Phrase})
+	if err != nil {
+		return err.Error()
+	}
+	return ""
 }
