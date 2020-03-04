@@ -1,9 +1,11 @@
 package email
 
-import "fmt"
-import "strings"
-import "net"
-import "net/smtp"
+import (
+	"fmt"
+	"net"
+	"net/smtp"
+	"strings"
+)
 
 func Send(to, from, subj, content string) {
 	tokens := strings.Split(to, "@")
@@ -13,6 +15,9 @@ func Send(to, from, subj, content string) {
 	fmt.Println(err)
 	for _, mx := range mxrecords {
 		fmt.Println(mx.Host, mx.Pref)
+	}
+	if len(mxrecords) == 0 {
+		return
 	}
 	server := mxrecords[0].Host
 	recipients := []string{to}
