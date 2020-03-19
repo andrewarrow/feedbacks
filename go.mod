@@ -3,6 +3,7 @@ module github.com/andrewarrow/feedbacks
 go 1.13
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/emersion/go-message v0.11.1
 	github.com/emersion/go-smtp v0.12.1
 	github.com/gin-gonic/gin v1.5.0

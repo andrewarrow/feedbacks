@@ -2,8 +2,8 @@ package models
 
 import "fmt"
 import "github.com/jmoiron/sqlx"
-import "encoding/base64"
-import "encoding/json"
+import "github.com/dgrijalva/jwt-go"
+import "time"
 
 type User struct {
 	Id        int    `json:"id"`
@@ -13,20 +13,39 @@ type User struct {
 	CreatedAt int64 `json:"created_at"`
 }
 
+const jwtSecret = "changeme-66c9dffa-a8b4-4f47-92e1-062298fcde79"
+
 func (u *User) Encode() string {
-	b, _ := json.Marshal(u)
-	s := string(b)
-	sEnc := base64.StdEncoding.EncodeToString([]byte(s))
-	return sEnc
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id": u.Id,
+		"email": u.Email,
+		"flavor": u.Flavor,
+    "nbf": time.Now().Unix(),
+})
+
+  tokenString, _ := token.SignedString(jwtSecret)
+	return tokenString
 }
 
 func DecodeUser(s string) *User {
-	var user User
-	decoded, _ := base64.StdEncoding.DecodeString(s)
-	err := json.Unmarshal([]byte(decoded), &user)
-	if err != nil {
-		return nil
+	var user User = User{}
+
+	token, err := jwt.Parse(s, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(jwtSecret), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		user.Id = claims["id"].(int)
+		user.Email = claims["email"].(string)
+		user.Flavor = claims["flavor"].(string)
+	} else {
+		fmt.Println(err)
 	}
+
 	return &user
 }
 
