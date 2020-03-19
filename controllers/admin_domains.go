@@ -5,12 +5,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
+var Stats = map[string]int{}
 
 func AdminDomainsIndex(c *gin.Context) {
 	if !BeforeAll("admin", c) {
 		return
 	}
 	domains, err := models.SelectDomains(Db, user.Id)
+	for _, domain := range domains {
+		domain.Hits = Stats[domain.Domain]
+	}
 
 	c.HTML(http.StatusOK, "admin__domains__index.tmpl", gin.H{
 		"flash":   err,
