@@ -23,7 +23,10 @@ func (u *User) Encode() string {
     "nbf": time.Now().Unix(),
 })
 
-  tokenString, _ := token.SignedString(jwtSecret)
+  tokenString, err := token.SignedString([]byte(jwtSecret))
+	if err != nil {
+		fmt.Println(err)
+	}
 	return tokenString
 }
 
@@ -38,8 +41,13 @@ func DecodeUser(s string) *User {
 		return []byte(jwtSecret), nil
 	})
 
+	if err != nil {
+		fmt.Println(err)
+	return &user
+	}
+
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		user.Id = claims["id"].(int)
+		user.Id = int(claims["id"].(float64))
 		user.Email = claims["email"].(string)
 		user.Flavor = claims["flavor"].(string)
 	} else {

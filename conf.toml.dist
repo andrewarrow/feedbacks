@@ -9,8 +9,3 @@ database="feedbacks"
 prefix="./"
 sites="./"
 
-[http]
-hosts = [
-  "alpha.com",
-  "omega.org"
-]
