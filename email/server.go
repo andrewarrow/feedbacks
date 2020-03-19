@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/andrewarrow/feedbacks/persist"
+	"github.com/andrewarrow/feedbacks/controllers"
 	"github.com/emersion/go-smtp"
 	"github.com/jmoiron/sqlx"
 	"github.com/saintienn/go-spamc"
@@ -81,6 +82,7 @@ func (s *Session) Data(r io.Reader) error {
 		"sent_from":  s.SentFrom, "sent_to": s.SentTo,
 		"subject": s.Subject}
 	fmt.Println("33333", m)
+  controllers.EmailStats[s.Host]++
 	insertChannel <- m
 	return nil
 }

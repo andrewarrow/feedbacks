@@ -11,6 +11,7 @@ type Domain struct {
 	Domain    string `json:"domain"`
 	CreatedAt int64  `json:"created_at"`
 	Hits int
+	Emails int
 }
 
 const DOMAIN_SELECT = "SELECT id, domain, UNIX_TIMESTAMP(created_at) as createdat from domains"
