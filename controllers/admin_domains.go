@@ -15,10 +15,12 @@ func AdminDomainsIndex(c *gin.Context) {
 		return
 	}
 	domains, err := models.SelectDomains(Db, user.Id)
+	Mutex.Lock()
 	for _, domain := range domains {
 		domain.Hits = Stats[domain.Domain]
 		domain.Emails = EmailStats[domain.Domain]
 	}
+	Mutex.Unlock()
 
 	c.HTML(http.StatusOK, "admin__domains__index.tmpl", gin.H{
 		"flash":   err,
