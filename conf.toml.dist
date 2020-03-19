@@ -9,3 +9,5 @@ database="feedbacks"
 prefix="./"
 sites="./"
 
+[http]
+secret="changeme-66c9dffa-a8b4-4f47-92e1-062298fcde79"

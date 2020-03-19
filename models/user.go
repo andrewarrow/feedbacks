@@ -3,6 +3,7 @@ package models
 import "fmt"
 import "github.com/jmoiron/sqlx"
 import "github.com/dgrijalva/jwt-go"
+import "github.com/andrewarrow/feedbacks/util"
 import "time"
 
 type User struct {
@@ -13,8 +14,6 @@ type User struct {
 	CreatedAt int64 `json:"created_at"`
 }
 
-const jwtSecret = "changeme-66c9dffa-a8b4-4f47-92e1-062298fcde79"
-
 func (u *User) Encode() string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id": u.Id,
@@ -23,7 +22,7 @@ func (u *User) Encode() string {
     "nbf": time.Now().Unix(),
 })
 
-  tokenString, err := token.SignedString([]byte(jwtSecret))
+  tokenString, err := token.SignedString([]byte(util.AllConfig.Http.Secret))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -38,7 +37,7 @@ func DecodeUser(s string) *User {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(jwtSecret), nil
+		return []byte(util.AllConfig.Http.Secret), nil
 	})
 
 	if err != nil {

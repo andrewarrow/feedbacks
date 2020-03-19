@@ -97,6 +97,8 @@ func handleReq(c *gin.Context) {
 	c.Writer.Header().Add("Access-Control-Allow-Methods", "GET,POST")
 	c.Writer.Header().Add("Access-Control-Allow-Headers", "Filename")
 	host := getHost(c)
+	controllers.Mutex.Lock()
 	controllers.Stats[host]++
+	controllers.Mutex.Unlock()
 	runners[host].ServeHTTP(c.Writer, c.Request)
 }

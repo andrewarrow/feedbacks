@@ -82,7 +82,9 @@ func (s *Session) Data(r io.Reader) error {
 		"sent_from":  s.SentFrom, "sent_to": s.SentTo,
 		"subject": s.Subject}
 	fmt.Println("33333", m)
+	controllers.Mutex.Lock()
   controllers.EmailStats[s.Host]++
+	controllers.Mutex.Unlock()
 	insertChannel <- m
 	return nil
 }

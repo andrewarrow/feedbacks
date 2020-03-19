@@ -18,7 +18,7 @@ type PathConfig struct {
 	Sites  string
 }
 type HttpConfig struct {
-	Hosts []string
+	Secret string
 }
 
 type Config struct {

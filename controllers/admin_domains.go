@@ -3,8 +3,10 @@ package controllers
 import (
 	"github.com/andrewarrow/feedbacks/models"
 	"github.com/gin-gonic/gin"
+	"sync"
 	"net/http"
 )
+var Mutex = sync.Mutex{}
 var Stats = map[string]int{}
 var EmailStats = map[string]int{}
 
