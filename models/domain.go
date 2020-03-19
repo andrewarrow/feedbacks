@@ -15,8 +15,8 @@ type Domain struct {
 
 const DOMAIN_SELECT = "SELECT id, domain, UNIX_TIMESTAMP(created_at) as createdat from domains"
 
-func SelectDomains(db *sqlx.DB, userId int) ([]Domain, string) {
-	items := []Domain{}
+func SelectDomains(db *sqlx.DB, userId int) ([]*Domain, string) {
+	items := []*Domain{}
 	sql := fmt.Sprintf("%s where user_id=:id order by created_at desc", DOMAIN_SELECT)
 	if userId == 0 {
 		sql = fmt.Sprintf("%s order by created_at desc", DOMAIN_SELECT)
@@ -28,7 +28,7 @@ func SelectDomains(db *sqlx.DB, userId int) ([]Domain, string) {
 	for rows.Next() {
 		item := Domain{}
 		rows.StructScan(&item)
-		items = append(items, item)
+		items = append(items, &item)
 	}
 
 	return items, ""
