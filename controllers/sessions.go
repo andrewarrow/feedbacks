@@ -39,7 +39,7 @@ func SessionsCreate(c *gin.Context) {
 		} else {
 			if rows.Next() {
 				rows.StructScan(&user)
-				c.SetCookie("user", user.Encode(), 3600, "/", rightHost(c), false, false)
+				c.SetCookie("user", user.Encode(), 3600 * 24 * 365, "/", rightHost(c), false, false)
 			} else {
 				babbler.Count = 4
 				phrase := babbler.Babble()
