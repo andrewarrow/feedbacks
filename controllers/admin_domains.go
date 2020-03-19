@@ -4,10 +4,11 @@ import (
 	"github.com/andrewarrow/feedbacks/models"
 	"github.com/gin-gonic/gin"
 	"sync"
+	"fmt"
 	"net/http"
 )
 var Mutex = sync.Mutex{}
-var Stats = map[string]int{}
+var Stats = map[string]map[string]int{}
 var EmailStats = map[string]int{}
 
 func AdminDomainsIndex(c *gin.Context) {
@@ -17,7 +18,10 @@ func AdminDomainsIndex(c *gin.Context) {
 	domains, err := models.SelectDomains(Db, user.Id)
 	Mutex.Lock()
 	for _, domain := range domains {
-		domain.Hits = Stats[domain.Domain]
+		domain.Hits = []string{}
+		for k, v := range Stats[domain.Domain] {
+			domain.Hits = append(domain.Hits, fmt.Sprintf("%s (%v)", k, v))
+		}
 		domain.Emails = EmailStats[domain.Domain]
 	}
 	Mutex.Unlock()

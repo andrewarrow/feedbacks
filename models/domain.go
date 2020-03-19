@@ -10,7 +10,7 @@ type Domain struct {
 	Id        int    `json:"id"`
 	Domain    string `json:"domain"`
 	CreatedAt int64  `json:"created_at"`
-	Hits int
+	Hits []string
 	Emails int
 }
 

@@ -20,7 +20,11 @@
   <td>{{add $i 1}}</td>
   <td><a href="/feedbacks/domains/{{$item.Domain}}">{{$item.Domain}}</a></td>
   <td>{{$item.Emails}}</td>
-  <td>{{$item.Hits}}</td>
+  <td>
+{{range $j, $hit := $item.Hits}}
+{{$hit}}<br/>
+{{end}}
+  </td>
 </tr>
 {{end}}
 </table>

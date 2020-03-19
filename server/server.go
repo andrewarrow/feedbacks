@@ -98,7 +98,11 @@ func handleReq(c *gin.Context) {
 	c.Writer.Header().Add("Access-Control-Allow-Headers", "Filename")
 	host := getHost(c)
 	controllers.Mutex.Lock()
-	controllers.Stats[host]++
+	fmt.Println(c.ClientIP())
+	if controllers.Stats[host] == nil {
+		controllers.Stats[host] = map[string]int{}
+	}
+	controllers.Stats[host][c.ClientIP()]++
 	controllers.Mutex.Unlock()
 	runners[host].ServeHTTP(c.Writer, c.Request)
 }
