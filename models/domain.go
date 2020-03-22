@@ -11,6 +11,7 @@ type Domain struct {
 	Domain    string `json:"domain"`
 	CreatedAt int64  `json:"created_at"`
 	Hits []string
+  Referers []string
 	Emails int
 }
 

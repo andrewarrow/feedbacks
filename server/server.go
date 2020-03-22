@@ -3,6 +3,7 @@ package server
 import (
 	"crypto/tls"
 	"fmt"
+	"strings"
 	"net/http"
 	"net/http/httputil"
 	"os"
@@ -103,6 +104,10 @@ func handleReq(c *gin.Context) {
 		controllers.Stats[host] = map[string]int{}
 	}
 	controllers.Stats[host][c.ClientIP()]++
+	if controllers.RefererStats[host] == nil {
+		controllers.RefererStats[host] = map[string]int{}
+	}
+	controllers.RefererStats[host][strings.Join(c.Request.Header["Referer"], ",")]++
 	controllers.Mutex.Unlock()
 	runners[host].ServeHTTP(c.Writer, c.Request)
 }

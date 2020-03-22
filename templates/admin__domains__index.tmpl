@@ -24,6 +24,9 @@
 {{range $j, $hit := $item.Hits}}
 {{$hit}}<br/>
 {{end}}
+{{range $j, $r := $item.Referers}}
+{{$r}}<br/>
+{{end}}
   </td>
 </tr>
 {{end}}

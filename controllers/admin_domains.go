@@ -10,6 +10,7 @@ import (
 var Mutex = sync.Mutex{}
 var Stats = map[string]map[string]int{}
 var EmailStats = map[string]int{}
+var RefererStats = map[string]map[string]int{}
 
 func AdminDomainsIndex(c *gin.Context) {
 	if !BeforeAll("admin", c) {
@@ -21,6 +22,10 @@ func AdminDomainsIndex(c *gin.Context) {
 		domain.Hits = []string{}
 		for k, v := range Stats[domain.Domain] {
 			domain.Hits = append(domain.Hits, fmt.Sprintf("%s (%v)", k, v))
+		}
+		domain.Referers = []string{}
+		for k, v := range RefererStats[domain.Domain] {
+			domain.Referers = append(domain.Referers, fmt.Sprintf("%s (%v)", k, v))
 		}
 		domain.Emails = EmailStats[domain.Domain]
 	}
