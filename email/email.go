@@ -72,9 +72,9 @@ func HelloSend(addr, from string, to []string, msg string) bool {
 	}
 
 	b := *bytes.NewBufferString(msg)
-	private, e := ioutil.ReadFile("private.key")
+	private, _ := ioutil.ReadFile("private.key")
+	block, e := pem.Decode(private)
 	if e != nil {
-		block, _ := pem.Decode(private)
 		privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 		if err != nil {
 			fmt.Println(err)
