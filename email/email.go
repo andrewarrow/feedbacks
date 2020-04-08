@@ -71,27 +71,30 @@ func HelloSend(addr, from string, to []string, msg string) bool {
 		return false
 	}
 
-	private, _ := ioutil.ReadFile("private.key")
-	block, _ := pem.Decode(private)
-	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-	if err != nil {
-		fmt.Println(err)
-		return false
-	}
+	b := *bytes.NewBufferString(msg)
+	private, e := ioutil.ReadFile("private.key")
+	if e != nil {
+		block, _ := pem.Decode(private)
+		privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+		if err != nil {
+			fmt.Println(err)
+			return false
+		}
 
-	r := strings.NewReader(msg)
+		r := strings.NewReader(msg)
 
-	options := &dkim.SignOptions{
-		Domain:   "socialdistance.app",
-		Selector: "manypw",
-		Signer:   privateKey,
-	}
+		options := &dkim.SignOptions{
+			Domain:   "socialdistance.app",
+			Selector: "manypw",
+			Signer:   privateKey,
+		}
 
-	var b bytes.Buffer
-	err = dkim.Sign(&b, r, options)
-	if err != nil {
-		fmt.Println(err)
-		return false
+		b = *bytes.NewBuffer([]byte{})
+		err = dkim.Sign(&b, r, options)
+		if err != nil {
+			fmt.Println(err)
+			return false
+		}
 	}
 
 	_, err = w.Write(b.Bytes())
