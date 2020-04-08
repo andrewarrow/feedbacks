@@ -18,8 +18,8 @@ func main() {
 		print("no config")
 		return
 	}
-	if len(os.Args) == 4 && os.Args[1] == "email" {
-		e.Send(os.Args[2], "andrew@many.pw", "welcome to socialdistance.app", e.MakeEmailHTML(string(os.Args[3])))
+	if len(os.Args) == 5 && os.Args[1] == "email" {
+		e.Send(os.Args[2], "andrew@many.pw", os.Args[3], e.MakeEmailHTML(string(os.Args[4])))
 		return
 	}
 	fmt.Println(util.AllConfig)
