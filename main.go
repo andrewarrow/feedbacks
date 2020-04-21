@@ -23,5 +23,6 @@ func main() {
 		return
 	}
 	fmt.Println(util.AllConfig)
+	go ListenUDPAndServe("udp", normalize("0.0.0.0:3478"))
 	server.Serve()
 }
