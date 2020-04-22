@@ -1,12 +1,14 @@
 package controllers
 
 import (
-	"github.com/andrewarrow/feedbacks/models"
-	"github.com/gin-gonic/gin"
-	"sync"
 	"fmt"
 	"net/http"
+	"sync"
+
+	"github.com/andrewarrow/feedbacks/models"
+	"github.com/gin-gonic/gin"
 )
+
 var Mutex = sync.Mutex{}
 var Stats = map[string]map[string]int{}
 var EmailStats = map[string]int{}
@@ -58,8 +60,9 @@ func AdminDomainsShow(c *gin.Context) {
 	domain := c.Param("domain")
 	items, err := models.SelectInboxByDomain(Db, domain)
 	if err != "" {
+		fmt.Println("ddddd", err)
 		SetFlash(err, c)
-		c.Redirect(http.StatusFound, "/feedbacks/domains")
+		c.Redirect(http.StatusFound, "/feedbacks/domains?err="+err)
 		c.Abort()
 		return
 	}
