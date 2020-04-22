@@ -73,7 +73,7 @@ func ReadEmailBody(s string) (string, string) {
 			if err == io.EOF {
 				break
 			} else if err != nil {
-				log.Fatal(err)
+				log.Println(err)
 			}
 
 			t, _, _ := p.Header.ContentType()

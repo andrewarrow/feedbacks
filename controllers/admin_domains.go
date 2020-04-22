@@ -60,9 +60,8 @@ func AdminDomainsShow(c *gin.Context) {
 	domain := c.Param("domain")
 	items, err := models.SelectInboxByDomain(Db, domain)
 	if err != "" {
-		fmt.Println("ddddd", err)
 		SetFlash(err, c)
-		c.Redirect(http.StatusFound, "/feedbacks/domains?err="+err)
+		c.Redirect(http.StatusFound, "/feedbacks/domains")
 		c.Abort()
 		return
 	}
