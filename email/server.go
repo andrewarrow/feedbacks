@@ -2,13 +2,15 @@ package email
 
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"io/ioutil"
 	"strings"
 	"time"
 
-	"github.com/andrewarrow/feedbacks/persist"
 	"github.com/andrewarrow/feedbacks/controllers"
+	"github.com/andrewarrow/feedbacks/models"
+	"github.com/andrewarrow/feedbacks/persist"
 	"github.com/emersion/go-smtp"
 	"github.com/jmoiron/sqlx"
 	"github.com/saintienn/go-spamc"
@@ -82,8 +84,12 @@ func (s *Session) Data(r io.Reader) error {
 		"sent_from":  s.SentFrom, "sent_to": s.SentTo,
 		"subject": s.Subject}
 	fmt.Println("33333", m)
+
+	_, html := models.ReadEmailBody(s.Body)
+	fmt.Println(template.HTML(html))
+
 	controllers.Mutex.Lock()
-  controllers.EmailStats[s.Host]++
+	controllers.EmailStats[s.Host]++
 	controllers.Mutex.Unlock()
 	insertChannel <- m
 	return nil
