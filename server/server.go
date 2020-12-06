@@ -76,6 +76,7 @@ func Serve() {
 			TLSConfig: tlsconf,
 		}
 
+		go email.Run(":25")
 		s.ListenAndServeTLS("", "")
 
 	} else {
